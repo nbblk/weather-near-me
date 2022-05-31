@@ -9,9 +9,10 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   extends: [
+    'airbnb',
+    'airbnb-typescript',
     'eslint:recommended',
     'plugin:react/recommended',
-    'airbnb',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
