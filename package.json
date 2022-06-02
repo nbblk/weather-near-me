@@ -16,8 +16,6 @@
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.2",
     "recharts": "^2.1.10",
-    "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1",
     "vite": "^2.9.9",
     "vite-tsconfig-paths": "^3.5.0"
   },
