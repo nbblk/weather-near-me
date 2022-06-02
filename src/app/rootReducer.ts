@@ -3,6 +3,8 @@ import { summarySlice } from '../features/summary/summarySlice';
 import { chartSlice } from '../features/chart/chartSlice';
 import { mapSlice } from '../features/map/mapSlice';
 
+//import {} from '@/app/App';
+
 const rootReducer = combineReducers({
   summary: summarySlice.reducer,
   chart: chartSlice.reducer,
