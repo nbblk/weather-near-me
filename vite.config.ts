@@ -9,14 +9,18 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
-      {
-        find: '@',
-        replacement: path.resolve(dirname),
-      },
-      {
-        find: '@features',
-        replacement: path.resolve(dirname, '/features'),
-      },
+      // {
+      //   find: /^@/,
+      //   replacement: path.resolve(dirname),
+      // },
+      // {
+      //   find: '@',
+      //   replacement: path.resolve(dirname),
+      // },
+      // {
+      //   find: '@features',
+      //   replacement: path.resolve(dirname, '/features'),
+      // },
     ],
   },
 });
