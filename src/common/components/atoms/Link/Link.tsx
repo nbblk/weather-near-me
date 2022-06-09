@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 
 type LinkTypes = {
   href: string;
-  children: ReactNode;
-  css: CSSObject;
+  children?: ReactNode;
+  css?: CSSObject;
 };
 
 const linkStyle: CSSObject = {

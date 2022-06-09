@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 type LogoTypes = {
   children: ReactNode;
-  css: CSSObject;
+  css?: CSSObject;
 };
 
 const logoStyle: CSSObject = {
