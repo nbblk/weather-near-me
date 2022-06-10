@@ -7,7 +7,7 @@ type weatherParamsType = {
   ny: number; // 127
 };
 
-export const SHORT_TERM_WEATHER_FORECAST_API_URL = (
+export const getShorttermWeatherForecastUrl = (
   weatherParams: weatherParamsType,
 ) => {
   return `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${process.env.WEATHER_CERT_KEY}&numOfRows=10&pageNo=1
