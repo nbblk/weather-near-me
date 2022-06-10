@@ -1,33 +1,41 @@
-import Card from "@/common/components/atoms/Card/Card";
-import { CSSObject } from "@emotion/react";
-import { useState, useEffect } from "react";
-
-type currentWeatherTypes = {
-    location: string,
-    weather: string,
-    temperature: number,
-    pm100: number,
-    pm25: number,
-    maximumTemp: number,
-    minimumTemp: number,
-
-};
-
-const currentWeatherStyle: CSSObject = {
-
-};
+/** @jsxImportSource @emotion/react */
+import Card from '@/common/components/atoms/Card/Card';
+import CurrentWeather from '@/common/components/organisms/CurrentWeather/CurrentWeather';
+import WeatherDigest from '@/common/components/organisms/WeatherDigest/WeatherDigest';
+import { CSSObject } from '@emotion/react';
 
 export default () => {
+  const mainStyles: CSSObject = {
+    width: '100vw',
+    padding: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
 
-    const [currentData, setCurrentData] = useState({
-        location: 'seoul',
-        weather: '',
-        temperature: 0,
-        pm100: 0,
-        pm25: 0,
-        maximumTemp: 0,
-        minimumTemp: 0
-    });
+  const chartsStyles: CSSObject = {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
 
-    return <main><Card css={{ ...currentWeatherStyle }}><h1></h1><div></div></Card></main>;
-}
+  return (
+    <main css={mainStyles}>
+      <Card css={{ width: '100%' }}>
+        <CurrentWeather />
+        <WeatherDigest />
+      </Card>
+      <div css={chartsStyles}>
+        <Card css={{ width: '50%' }}>
+          <div>chart1</div>
+        </Card>
+        <Card css={{ width: '50%' }}>
+          <div>chart2</div>
+        </Card>
+      </div>
+    </main>
+  );
+};
