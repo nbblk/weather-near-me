@@ -1,3 +1,3 @@
 export default () => {
-    return <div>summary page</div>;
-}
+  return <div>map page</div>;
+};
