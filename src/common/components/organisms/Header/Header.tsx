@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import Logo from '@/common/components/atoms/Logo/Logo';
+import Logo from '@common/components/atoms/Logo/Logo';
 import { CSSObject } from '@emotion/react';
 import { Link, NavLink } from 'react-router-dom';
 

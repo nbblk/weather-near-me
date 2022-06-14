@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
-import Header from '@/common/components/organisms/Header/Header';
-import Summary from '@/pages/Summary';
-import Map from '@/pages/Map';
+import Header from '@common/components/organisms/Header/Header';
+import Summary from '@pages/Summary';
+import Map from '@pages/Map';
 
 import './App.css';
 
