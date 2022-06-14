@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { CSSObject } from '@emotion/react';
 import { ReactNode } from 'react';
 
