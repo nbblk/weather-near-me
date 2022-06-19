@@ -21,11 +21,11 @@ export default ({ pm10, pm25, maxTemp, minTemp, humidity }: WeatherDigest) => {
         </tr>
         <tr>
           <th scope="row">최고기온</th>
-          <td>{maxTemp}</td>
+          <td>{maxTemp}°C</td>
         </tr>
         <tr>
           <th scope="row">최저기온</th>
-          <td>{minTemp}</td>
+          <td>{minTemp}°C</td>
         </tr>
         <tr>
           <th scope="row">습도</th>

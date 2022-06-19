@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import Icon from '@common/components/atoms/Icon/Icon';
 import { CSSObject } from '@emotion/react';
+import { getWeatherImgPath } from '@common/utils/utils';
 
 type CurrentWeather = {
   location: string;
@@ -26,24 +27,21 @@ export default ({ location, temperature, weather }: CurrentWeather) => {
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'flex-end',
         }}
       >
-        <Icon children={undefined} css={{ width: '80px', height: '80px' }} />
-        <p
-          css={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <span css={{ position: 'relative', fontSize: 'xxx-large' }}>
-            {`${temperature}°C`}
-          </span>
-          <span css={{ position: 'absolute', right: 0, margin: '0 1rem' }}>
-            {weather}
-          </span>
-        </p>
+        <Icon css={{ width: '150px', height: '150px', margin: '1rem' }}>
+          <img
+            src={getWeatherImgPath(weather)}
+            alt={weather}
+            width="100"
+            height="100"
+          />
+        </Icon>
+        <span
+          css={{ fontSize: 'xxx-large', margin: '1rem' }}
+        >{`${temperature}°C`}</span>
+        <span css={{ alignSelf: 'flex-end' }}>{weather}</span>
       </div>
     </div>
   );

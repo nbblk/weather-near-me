@@ -1,13 +1,14 @@
-import { configureStore, Action } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
-
-import rootReducer, { RootState } from './rootReducer';
+import logger from 'redux-logger';
+import { configureStore } from '@reduxjs/toolkit';
+import { apiSlice } from '@features/api/apiSlice';
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    [apiSlice.reducerPath]: apiSlice.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(logger).concat(apiSlice.middleware),
+  devTools: process.env.NODE_ENV !== 'production',
 });
-
-export type AppDispatch = typeof store.dispatch;
-export const useAppDispatch = () => useDispatch();
 
 export default store;

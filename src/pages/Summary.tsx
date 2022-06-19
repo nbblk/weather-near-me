@@ -16,58 +16,73 @@ import {
   YAxis,
 } from 'recharts';
 import {
-  fetchWeather,
-  fetchWeatherForecast,
-} from '../common/services/weatherService';
-import { fetchAir, fetchAirForecast } from '../common/services/airService';
-
-type Summary = {
-  location: string;
-  dt: number;
-  weather: string;
-  temperature: number;
-  pm10: number;
-  pm25: number;
-  maximumTemp: number;
-  minimumTemp: number;
-  humidity: number;
-};
+  useGetCurrentAirInfoQuery,
+  useGetAirForecastQuery,
+  useGetCurrentWeatherInfoQuery,
+  useGetWeatherForecastQuery,
+} from '@features/api/apiSlice';
+import { defaultGeolocation, getGeolocation } from '@features/api/api';
 
 export default () => {
-  const [data, setData] = useState<Summary>({
-    location: '',
-    dt: 0,
-    weather: '',
-    temperature: 0,
-    pm10: 0,
-    pm25: 0,
-    maximumTemp: 0,
-    minimumTemp: 0,
-    humidity: 0,
+  const [location, setLocation] = useState({ ...defaultGeolocation });
+
+  const {
+    data: air,
+    //    error,
+    //    isLoading,
+  } = useGetCurrentAirInfoQuery({
+    type: 'air_pollution',
+    lat: location.lat,
+    lon: location.lon,
   });
 
-  const [forecast, setForecast] = useState({
-    temperatures: [] as any,
-    air: [] as any,
+  const {
+    data: airForecast,
+    //error,
+    //isLoading,
+  } = useGetAirForecastQuery({
+    type: 'air_pollution/forecast',
+    lat: location.lat,
+    lon: location.lon,
+  });
+
+  const {
+    data: weather,
+    //  error,
+    //  isLoading,
+  } = useGetCurrentWeatherInfoQuery({
+    type: 'weather',
+    lat: location.lat,
+    lon: location.lon,
+  });
+
+  const {
+    data: weatherForecast,
+    //   error,
+    //   isLoading,
+  } = useGetWeatherForecastQuery({
+    type: 'forecast',
+    lat: location.lat,
+    lon: location.lon,
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await Promise.all([
-        fetchWeather(),
-        fetchAir(),
-        fetchWeatherForecast(),
-        fetchAirForecast(),
-      ]);
-
-      setData({ ...response[0], ...response[1] });
-      setForecast({ ...response[2], ...response[3] });
+    const getLocation = async () => {
+      await getGeolocation()
+        .then((position: any) => {
+          console.log(position);
+          setLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
+        })
+        .catch((error: any) => {
+          setLocation({
+            ...defaultGeolocation,
+          });
+        });
     };
-    try {
-      fetchData();
-    } catch (error: any) {
-      alert(error.message);
-    }
+    getLocation();
   }, []);
 
   const mainStyles: CSSObject = {
@@ -90,24 +105,28 @@ export default () => {
   return (
     <main css={mainStyles}>
       <Card css={{ width: '100%' }}>
-        <CurrentWeather
-          location={data.location}
-          temperature={data.temperature}
-          weather={data.weather}
-        />
-        <WeatherDigest
-          pm10={data.pm10}
-          pm25={data.pm25}
-          maxTemp={data.maximumTemp}
-          minTemp={data.minimumTemp}
-          humidity={data.humidity}
-        />
+        {weather && (
+          <CurrentWeather
+            location={weather.location}
+            temperature={weather.temperature}
+            weather={weather.weather}
+          />
+        )}{' '}
+        {weather && air && (
+          <WeatherDigest
+            pm10={air.pm10}
+            pm25={air.pm25}
+            maxTemp={weather.maximumTemp}
+            minTemp={weather.minimumTemp}
+            humidity={weather.humidity}
+          />
+        )}{' '}
       </Card>
       <div css={chartsStyles}>
         <Card css={{ width: '50%' }}>
           <ResponsiveContainer height={400}>
             <LineChart
-              data={forecast.temperatures}
+              data={weatherForecast?.temperatures}
               margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
             >
               <Line type="monotone" dataKey="temp_max" stroke="#8884d8" />
@@ -121,7 +140,7 @@ export default () => {
         <Card css={{ width: '50%' }}>
           <ResponsiveContainer height={400}>
             <BarChart
-              data={forecast.air}
+              data={airForecast?.air}
               margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
             >
               <XAxis dataKey="dt" />
