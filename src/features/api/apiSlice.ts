@@ -1,5 +1,10 @@
-import { ApiType, baseURL, getUrl } from '@features/api/api';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+type ApiType =
+  | 'weather'
+  | 'forecast'
+  | 'air_pollution'
+  | 'air_pollution/forecast';
 
 type params = {
   type: ApiType;
@@ -21,6 +26,14 @@ type weatherResponse = {
   minimumTemp: number;
   humidity: number;
   weather: string;
+};
+
+const baseURL = `https://api.openweathermap.org/data/2.5`;
+
+const getUrl = (type: ApiType, lat: number, lon: number) => {
+  return `/${type}?lat=${lat}&lon=${lon}&units=metric&lang=kr&appid=${
+    import.meta.env.VITE_AIR_POLLUTION_API_KEY
+  }`;
 };
 
 export const apiSlice = createApi({

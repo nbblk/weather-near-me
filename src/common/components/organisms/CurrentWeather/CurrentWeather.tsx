@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Icon from '@common/components/atoms/Icon/Icon';
 import { CSSObject } from '@emotion/react';
-import { getWeatherImgPath } from '@common/utils/utils';
 
 type CurrentWeather = {
   location: string;
@@ -9,7 +8,27 @@ type CurrentWeather = {
   temperature: number;
 };
 
+enum weatherTypes {
+  비 = 'rain',
+  구름 = 'cloud',
+  맑음 = 'sun',
+}
+
 export default ({ location, temperature, weather }: CurrentWeather) => {
+  const getWeatherImgPath = (weather: string) => {
+    let path = `./src/common/assets/`;
+    if (weather.includes('비')) {
+      path += `${weatherTypes.비}.png`;
+    }
+    if (weather.includes('구름')) {
+      path += `${weatherTypes.구름}.png`;
+    }
+    if (weather.includes('맑음')) {
+      path += `${weatherTypes.맑음}.png`;
+    }
+    return path;
+  };
+
   const currentWeatherStyle: CSSObject = {
     width: '100%',
     padding: '1rem',
