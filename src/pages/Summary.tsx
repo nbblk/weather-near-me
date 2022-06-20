@@ -3,7 +3,6 @@ import Card from '@common/components/atoms/Card/Card';
 import CurrentWeather from '@common/components/organisms/CurrentWeather/CurrentWeather';
 import WeatherDigest from '@common/components/organisms/WeatherDigest/WeatherDigest';
 import { CSSObject } from '@emotion/react';
-import { useEffect, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -21,10 +20,10 @@ import {
   useGetCurrentWeatherInfoQuery,
   useGetWeatherForecastQuery,
 } from '@features/api/apiSlice';
-import { defaultGeolocation, getGeolocation } from '@features/api/api';
+import { useGeolocation } from '@common/hooks/useGeolocation';
 
 export default () => {
-  const [location, setLocation] = useState({ ...defaultGeolocation });
+  const { lat, lon } = useGeolocation();
 
   const {
     data: air,
@@ -32,8 +31,8 @@ export default () => {
     //    isLoading,
   } = useGetCurrentAirInfoQuery({
     type: 'air_pollution',
-    lat: location.lat,
-    lon: location.lon,
+    lat: lat,
+    lon: lon,
   });
 
   const {
@@ -42,8 +41,8 @@ export default () => {
     //isLoading,
   } = useGetAirForecastQuery({
     type: 'air_pollution/forecast',
-    lat: location.lat,
-    lon: location.lon,
+    lat: lat,
+    lon: lon,
   });
 
   const {
@@ -52,8 +51,8 @@ export default () => {
     //  isLoading,
   } = useGetCurrentWeatherInfoQuery({
     type: 'weather',
-    lat: location.lat,
-    lon: location.lon,
+    lat: lat,
+    lon: lon,
   });
 
   const {
@@ -62,28 +61,9 @@ export default () => {
     //   isLoading,
   } = useGetWeatherForecastQuery({
     type: 'forecast',
-    lat: location.lat,
-    lon: location.lon,
+    lat: lat,
+    lon: lon,
   });
-
-  useEffect(() => {
-    const getLocation = async () => {
-      await getGeolocation()
-        .then((position: any) => {
-          console.log(position);
-          setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        })
-        .catch((error: any) => {
-          setLocation({
-            ...defaultGeolocation,
-          });
-        });
-    };
-    getLocation();
-  }, []);
 
   const mainStyles: CSSObject = {
     width: '100vw',
