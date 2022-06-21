@@ -1,50 +1,22 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { AirResponse, QueryParams, WeatherResponse } from './types';
 
-type ApiType =
-  | 'weather'
-  | 'forecast'
-  | 'air_pollution'
-  | 'air_pollution/forecast';
+const BASE_URL = `https://api.openweathermap.org/data/2.5`;
 
-type params = {
-  type: ApiType;
-  lat: number;
-  lon: number;
-};
-
-type airResponse = {
-  dt: number;
-  pm10: number;
-  pm25: number;
-};
-
-type weatherResponse = {
-  dt: number;
-  location: string;
-  temperature: number;
-  maximumTemp: number;
-  minimumTemp: number;
-  humidity: number;
-  weather: string;
-};
-
-const baseURL = `https://api.openweathermap.org/data/2.5`;
-
-const getUrl = (type: ApiType, lat: number, lon: number) => {
-  return `/${type}?lat=${lat}&lon=${lon}&units=metric&lang=kr&appid=${
+const getUrl = ({ type, lat, lon }: QueryParams) =>
+  `/${type}?lat=${lat}&lon=${lon}&units=metric&lang=kr&appid=${
     import.meta.env.VITE_AIR_POLLUTION_API_KEY
   }`;
-};
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: baseURL,
+    baseUrl: BASE_URL,
   }),
   endpoints: (builder) => ({
-    getCurrentAirInfo: builder.query<airResponse, params>({
-      query: (params: params) => getUrl(params.type, params.lat, params.lon),
-      transformResponse: (response: any, meta, arg) => {
+    getCurrentAirInfo: builder.query<AirResponse, QueryParams>({
+      query: (params: QueryParams) => getUrl({ ...params }),
+      transformResponse: (response: any) => {
         const resp = response.list[0];
         return {
           dt: resp.dt,
@@ -53,18 +25,18 @@ export const apiSlice = createApi({
         };
       },
     }),
-    getAirForecast: builder.query<{ air: airResponse[] }, params>({
-      query: (params: params) => getUrl(params.type, params.lat, params.lon),
-      transformResponse: (response: any, meta, arg) => {
+    getAirForecast: builder.query<{ air: AirResponse[] }, QueryParams>({
+      query: (params: QueryParams) => getUrl({ ...params }),
+      transformResponse: (response: any) => {
         const resp = response.list;
-        const newAir = [] as any;
+        const newAir = [] as AirResponse[];
 
         resp.forEach((element: any) => {
           const components = element.components;
           newAir.push({
             dt: new Date(element.dt * 1000).toLocaleString(),
             pm10: components.pm10,
-            pm2_5: components.pm2_5,
+            pm25: components.pm2_5,
           });
         });
 
@@ -73,9 +45,9 @@ export const apiSlice = createApi({
         };
       },
     }),
-    getCurrentWeatherInfo: builder.query<weatherResponse, params>({
-      query: (params: params) => getUrl(params.type, params.lat, params.lon),
-      transformResponse: (response: any, meta, arg) => {
+    getCurrentWeatherInfo: builder.query<WeatherResponse, QueryParams>({
+      query: (params: QueryParams) => getUrl({ ...params }),
+      transformResponse: (response: any) => {
         const resp = response;
         return {
           dt: resp.dt,
@@ -85,25 +57,26 @@ export const apiSlice = createApi({
           minimumTemp: resp.main.temp_min,
           humidity: resp.main.humidity,
           weather: resp.weather[0].description,
+          weather_en: resp.weather[0].main,
         };
       },
     }),
     getWeatherForecast: builder.query<
-      { temperatures: weatherResponse[] },
-      params
+      { temperatures: Partial<WeatherResponse>[] },
+      QueryParams
     >({
-      query: (params: params) => getUrl(params.type, params.lat, params.lon),
-      transformResponse: (response: any, meta, arg) => {
+      query: (params: QueryParams) => getUrl({ ...params }),
+      transformResponse: (response: any) => {
         const resp = response.list;
-        const newWeather = [] as any;
+        const newWeather = [] as Partial<WeatherResponse>[];
 
         resp.forEach((element: any) => {
           const weather = element.main;
           newWeather.push({
             dt: new Date(element.dt * 1000).toLocaleString(),
-            temp: weather.temp,
-            temp_max: weather.temp_max,
-            temp_min: weather.temp_min,
+            temperature: weather.temp,
+            maximumTemp: weather.temp_max,
+            minimumTemp: weather.temp_min,
           });
         });
 
