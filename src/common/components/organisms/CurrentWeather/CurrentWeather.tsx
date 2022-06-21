@@ -12,6 +12,7 @@ enum weatherTypes {
   비 = 'rain',
   구름 = 'cloud',
   맑음 = 'sun',
+  박무 = 'mist',
 }
 
 export default ({ location, temperature, weather }: CurrentWeather) => {
@@ -20,11 +21,14 @@ export default ({ location, temperature, weather }: CurrentWeather) => {
     if (weather.includes('비')) {
       path += `${weatherTypes.비}.png`;
     }
-    if (weather.includes('구름')) {
+    if (weather.includes('구름') || weather.includes('흐림')) {
       path += `${weatherTypes.구름}.png`;
     }
     if (weather.includes('맑음')) {
       path += `${weatherTypes.맑음}.png`;
+    }
+    if (weather.includes('박무')) {
+      path += `${weatherTypes.박무}.png`;
     }
     return path;
   };
