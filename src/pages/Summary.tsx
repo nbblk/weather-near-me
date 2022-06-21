@@ -109,8 +109,8 @@ export default () => {
               data={weatherForecast?.temperatures}
               margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
             >
-              <Line type="monotone" dataKey="temp_max" stroke="#8884d8" />
-              <Line type="monotone" dataKey="temp_min" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="maximumTemp" stroke="#8884d8" />
+              <Line type="monotone" dataKey="minimumTemp" stroke="#82ca9d" />
               <XAxis dataKey="dt" />
               <YAxis />
               <Tooltip />
@@ -128,7 +128,7 @@ export default () => {
               <Tooltip />
               <Legend />
               <Bar dataKey="pm10" fill="#8884d8" />
-              <Bar dataKey="pm2_5" fill="#82ca9d" />
+              <Bar dataKey="pm25" fill="#82ca9d" />
             </BarChart>
           </ResponsiveContainer>
         </Card>
