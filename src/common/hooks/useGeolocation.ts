@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const defaultGeolocation = { lat: 37.5665, lon: 126.978 };
+const defaultGeolocation = { lat: 37.5665, lon: 126.978 };
 
 export const useGeolocation = () => {
   const [geolocation, setGeolocation] = useState({
@@ -30,7 +30,7 @@ export const useGeolocation = () => {
         });
     };
     getLocation();
-  });
+  }, []);
 
   return { ...geolocation };
 };
