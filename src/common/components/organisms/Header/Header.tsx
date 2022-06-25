@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 
 import Logo from '@common/components/atoms/Logo/Logo';
+import Links from '@common/components/molecules/Links';
 import { CSSObject } from '@emotion/react';
-import { Link, NavLink } from 'react-router-dom';
 
 type HeaderTypes = {
   css?: CSSObject;
@@ -23,28 +23,19 @@ const headerStyle: CSSObject = {
   },
 };
 
+const navLinkStyle: CSSObject = {
+  textDecoration: 'none',
+  color: 'black',
+  ':hover': { textDecoration: 'underline' },
+};
+
 const links = ['summary', 'map'];
 
 export default ({ css }: HeaderTypes) => {
   return (
     <div css={{ ...headerStyle, ...css }}>
       <Logo />
-      <ul>
-        {links.map((link) => (
-          <li key={link} css={{ padding: '0 1rem' }}>
-            <NavLink
-              css={{
-                textDecoration: 'none',
-                color: 'black',
-                ':hover': { textDecoration: 'underline' },
-              }}
-              to={`/${link}`}
-            >
-              {link}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+      <Links links={links} css={navLinkStyle} />
     </div>
   );
 };

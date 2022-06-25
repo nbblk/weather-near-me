@@ -1,12 +1,7 @@
+import { getUrl } from '@common/utils/utils';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BASE_URL } from './constants';
 import { AirResponse, QueryParams, WeatherResponse } from './types';
-
-const BASE_URL = `https://api.openweathermap.org/data/2.5`;
-
-const getUrl = ({ type, lat, lon }: QueryParams) =>
-  `/${type}?lat=${lat}&lon=${lon}&units=metric&lang=kr&appid=${
-    import.meta.env.VITE_AIR_POLLUTION_API_KEY
-  }`;
 
 export const apiSlice = createApi({
   reducerPath: 'api',

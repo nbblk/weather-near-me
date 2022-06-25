@@ -1,10 +1,6 @@
-export const apiType = [
-  'weather',
-  'forecast',
-  'air_pollution',
-  'air_pollution/forecast',
-] as const;
-type ApiType = typeof apiType[keyof typeof apiType];
+import { apiType } from './constants';
+
+export type ApiType = typeof apiType[keyof typeof apiType];
 
 export type QueryParams = {
   type: ApiType;
