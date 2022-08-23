@@ -1,4 +1,4 @@
-import { apiType } from './constants';
+import { apiType } from '../constants/constants';
 
 export type ApiType = typeof apiType[keyof typeof apiType];
 
