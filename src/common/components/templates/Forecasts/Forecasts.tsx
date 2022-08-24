@@ -2,7 +2,7 @@
 
 import Card from '@common/components/atoms/Card/Card';
 import { CSSObject } from '@emotion/react';
-import { AirResponse, WeatherResponse } from '@features/api/types';
+import { AirResponse, WeatherResponse } from '@common/types/types';
 import AirForecastChart from '../../organisms/Chart/AirForecastChart/AirForecastChart';
 import WeatherForecastChart from '../../organisms/Chart/WeatherForecastChart/WeatherForecastChart';
 

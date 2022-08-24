@@ -11,7 +11,6 @@ import { apiType } from '@common/constants/constants';
 import Forecasts from '@common/components/templates/Forecasts/Forecasts';
 import Current from '@common/components/templates/Current/Current';
 
-// receiver ?
 export default () => {
   const { lat, lon } = useGeolocation();
 

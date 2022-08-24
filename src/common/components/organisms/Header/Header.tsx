@@ -9,6 +9,7 @@ type HeaderTypes = {
 };
 
 const headerStyle: CSSObject = {
+  zIndex: 10,
   width: '100vw',
   padding: 0,
   display: 'flex',
