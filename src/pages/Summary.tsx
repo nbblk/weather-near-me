@@ -6,12 +6,12 @@ import {
   useGetCurrentWeatherInfoQuery,
   useGetWeatherForecastQuery,
 } from '@features/api/apiSlice';
-import { useGeolocation } from '@common/hooks/useGeolocation';
+import { useGeolocation } from '@common/components/hooks/useGeolocation';
+import { apiType } from '@common/constants/constants';
 import Forecasts from '@common/components/templates/Forecasts/Forecasts';
 import Current from '@common/components/templates/Current/Current';
-import Loader from '@common/components/atoms/Loader/Loader';
-import { apiType } from '@features/api/constants';
 
+// receiver ?
 export default () => {
   const { lat, lon } = useGeolocation();
 
