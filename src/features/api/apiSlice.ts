@@ -1,86 +1,33 @@
-import { getUrl } from '@common/utils/utils';
+import { BaseQueryFn } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
+import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from './constants';
-import { AirResponse, QueryParams, WeatherResponse } from './types';
+import {
+  AirForecast,
+  CurrentAirInfo,
+  CurrentWeatherInfo,
+  WeatherForecast,
+} from './command/commands';
+import { CommandManager } from './command/CommandManager';
+import { BASE_URL } from '../../common/constants/constants';
+
+const endpointGenerator = (
+  builder: EndpointBuilder<BaseQueryFn, string, string>,
+) => {
+  const commandManager = new CommandManager(builder); // invoker
+  return {
+    getCurrentAirInfo: commandManager.setCommand(new CurrentAirInfo()),
+    getAirForecast: commandManager.setCommand(new AirForecast()),
+    getCurrentWeatherInfo: commandManager.setCommand(new CurrentWeatherInfo()),
+    getWeatherForecast: commandManager.setCommand(new WeatherForecast()),
+  };
+};
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
   }),
-  endpoints: (builder) => ({
-    getCurrentAirInfo: builder.query<AirResponse, QueryParams>({
-      query: (params: QueryParams) => getUrl({ ...params }),
-      transformResponse: (response: any) => {
-        const resp = response.list[0];
-        return {
-          dt: resp.dt,
-          pm10: resp.components.pm10,
-          pm25: resp.components.pm2_5,
-        };
-      },
-    }),
-    getAirForecast: builder.query<{ air: AirResponse[] }, QueryParams>({
-      query: (params: QueryParams) => getUrl({ ...params }),
-      transformResponse: (response: any) => {
-        const resp = response.list;
-        const newAir = [] as AirResponse[];
-
-        resp.forEach((element: any) => {
-          const components = element.components;
-          newAir.push({
-            dt: new Date(element.dt * 1000).toLocaleString(),
-            pm10: components.pm10,
-            pm25: components.pm2_5,
-          });
-        });
-
-        return {
-          air: newAir,
-        };
-      },
-    }),
-    getCurrentWeatherInfo: builder.query<WeatherResponse, QueryParams>({
-      query: (params: QueryParams) => getUrl({ ...params }),
-      transformResponse: (response: any) => {
-        const resp = response;
-        return {
-          dt: resp.dt,
-          location: resp.name,
-          temperature: resp.main.temp,
-          maximumTemp: resp.main.temp_max,
-          minimumTemp: resp.main.temp_min,
-          humidity: resp.main.humidity,
-          weather: resp.weather[0].description,
-          weather_en: resp.weather[0].main,
-        };
-      },
-    }),
-    getWeatherForecast: builder.query<
-      { temperatures: Partial<WeatherResponse>[] },
-      QueryParams
-    >({
-      query: (params: QueryParams) => getUrl({ ...params }),
-      transformResponse: (response: any) => {
-        const resp = response.list;
-        const newWeather = [] as Partial<WeatherResponse>[];
-
-        resp.forEach((element: any) => {
-          const weather = element.main;
-          newWeather.push({
-            dt: new Date(element.dt * 1000).toLocaleString(),
-            temperature: weather.temp,
-            maximumTemp: weather.temp_max,
-            minimumTemp: weather.temp_min,
-          });
-        });
-
-        return {
-          temperatures: newWeather,
-        };
-      },
-    }),
-  }),
+  endpoints: (builder) => endpointGenerator(builder),
 });
 
 export const {
