@@ -5,8 +5,9 @@ import {
   AirForecast,
   CurrentAirInfo,
   CurrentWeatherInfo,
+  MapMarkerInfo,
   WeatherForecast,
-} from './command/commands';
+} from './command/ConcreteCommands';
 import { CommandManager } from './command/CommandManager';
 import { BASE_URL } from '../../common/constants/constants';
 
@@ -19,6 +20,7 @@ const endpointGenerator = (
     getAirForecast: commandManager.setCommand(new AirForecast()),
     getCurrentWeatherInfo: commandManager.setCommand(new CurrentWeatherInfo()),
     getWeatherForecast: commandManager.setCommand(new WeatherForecast()),
+    getMapMarkerInfo: commandManager.setCommand(new MapMarkerInfo()),
   };
 };
 
@@ -35,4 +37,5 @@ export const {
   useGetAirForecastQuery,
   useGetCurrentWeatherInfoQuery,
   useGetWeatherForecastQuery,
+  useGetMapMarkerInfoQuery,
 } = apiSlice;

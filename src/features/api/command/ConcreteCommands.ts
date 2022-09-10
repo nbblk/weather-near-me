@@ -1,4 +1,11 @@
-import { AirResponse, QueryParams, WeatherResponse } from '@common/types/types';
+import { apiType, markers } from '@common/constants/constants';
+import {
+  AirResponse,
+  Info,
+  MarkerPosition,
+  QueryParams,
+  WeatherResponse,
+} from '@common/types/types';
 import { getUrl } from '@common/utils/utils';
 import { BaseQueryFn } from '@reduxjs/toolkit/dist/query';
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
@@ -90,6 +97,52 @@ export class WeatherForecast implements Command {
         return {
           temperatures: newWeather,
         };
+      },
+    });
+  }
+}
+
+export class MapMarkerInfo implements Command {
+  execute(builder: EndpointBuilder<BaseQueryFn, string, string>) {
+    return builder.query<Info[], []>({
+      queryFn: async (args, _queryApi, _extraOptions, baseQuery) => {
+        const weatherResults = await Promise.all(
+          args.map((marker: MarkerPosition) =>
+            baseQuery(
+              getUrl({ type: apiType[0], lat: marker.lat, lon: marker.lon }),
+            ),
+          ),
+        );
+        const airResults = await Promise.all(
+          args.map((marker: MarkerPosition) =>
+            baseQuery(
+              getUrl({ type: apiType[2], lat: marker.lat, lon: marker.lon }),
+            ),
+          ),
+        );
+
+        const weatherData = weatherResults.map((result) => result.data);
+        const airData = airResults.map(
+          (result) => result.data.list[0].components,
+        );
+
+        const newArr: Info[] = [];
+
+        for (let i = 0; i < weatherData.length; i++) {
+          const weather = weatherData[i];
+          const air = airData[i];
+          newArr.push({
+            location: weather.name,
+            temperature: weather.main.temp,
+            minimumTemp: weather.main.temp_min,
+            maximumTemp: weather.main.temp_max,
+            humidity: weather.main.humidity,
+            pm10: air.pm10,
+            pm25: air.pm2_5,
+          });
+        }
+
+        return { data: newArr };
       },
     });
   }
