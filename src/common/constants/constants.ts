@@ -1,3 +1,5 @@
+import { MarkerPosition } from '@common/types/types';
+
 export const BASE_URL = `https://api.openweathermap.org/data/2.5`;
 
 export const apiType = [
@@ -7,55 +9,55 @@ export const apiType = [
   'air_pollution/forecast',
 ] as const;
 
-export const markers = [
+export const markers: MarkerPosition[] = [
   {
-    name: '서울',
+    city: '서울',
     lat: 37.56667,
-    long: 126.97806,
+    lon: 126.97806,
   },
   {
-    name: '부산',
+    city: '부산',
     lat: 35.17944,
-    long: 129.07556,
+    lon: 129.07556,
   },
   {
-    name: '인천',
+    city: '인천',
     lat: 37.45639,
-    long: 126.70528,
+    lon: 126.70528,
   },
   {
-    name: '대구',
+    city: '대구',
     lat: 35.87222,
-    long: 128.6025,
+    lon: 128.6025,
   },
   {
-    name: '안양',
+    city: '안양',
     lat: 37.39444,
-    long: 126.95556,
+    lon: 126.95556,
   },
   {
-    name: '대전',
+    city: '대전',
     lat: 36.35111,
-    long: 127.385,
+    lon: 127.385,
   },
   {
-    name: '광주',
+    city: '광주',
     lat: 35.15972,
-    long: 126.85306,
+    lon: 126.85306,
   },
   {
-    name: '수원',
+    city: '수원',
     lat: 37.26389,
-    long: 127.02861,
+    lon: 127.02861,
   },
   {
-    name: '울산',
+    city: '울산',
     lat: 35.53889,
-    long: 129.31667,
+    lon: 129.31667,
   },
   {
-    name: '창원',
+    city: '창원',
     lat: 35.22917,
-    long: 128.675,
+    lon: 128.675,
   },
 ];

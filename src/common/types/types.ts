@@ -23,3 +23,25 @@ export type WeatherResponse = {
   humidity: number;
   weather: string;
 };
+
+export type MarkerPosition = {
+  city: string;
+  lat: number;
+  lon: number;
+};
+
+export type InfoWindow = {
+  position: MarkerPosition;
+  marker: any;
+  map: any;
+};
+
+export type Info = {
+  location: string;
+  temperature: number;
+  minimumTemp: number;
+  maximumTemp: number;
+  humidity: number;
+  pm25: number;
+  pm10: number;
+};
