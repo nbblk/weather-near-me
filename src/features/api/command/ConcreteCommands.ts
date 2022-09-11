@@ -8,6 +8,7 @@ import {
 } from '@common/types/types';
 import { getUrl } from '@common/utils/utils';
 import { BaseQueryFn } from '@reduxjs/toolkit/dist/query';
+import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
 import { Command } from './Command';
 
@@ -121,29 +122,44 @@ export class MapMarkerInfo implements Command {
           ),
         );
 
-        const weatherData = weatherResults.map((result) => result.data);
-        const airData = airResults.map(
-          (result) => result.data.list[0].components,
-        );
-
-        const newArr: Info[] = [];
-
-        for (let i = 0; i < weatherData.length; i++) {
-          const weather = weatherData[i];
-          const air = airData[i];
-          newArr.push({
-            location: weather.name,
-            temperature: weather.main.temp,
-            minimumTemp: weather.main.temp_min,
-            maximumTemp: weather.main.temp_max,
-            humidity: weather.main.humidity,
-            pm10: air.pm10,
-            pm25: air.pm2_5,
-          });
-        }
-
-        return { data: newArr };
+        return this.mergeData(weatherResults, airResults);
       },
     });
+  }
+
+  mergeData(
+    weatherResponse: QueryReturnValue[],
+    airResponse: QueryReturnValue[],
+  ) {
+    const newArr: Partial<Info>[] = [];
+
+    const weatherData: Partial<WeatherResponse>[] = weatherResponse.map(
+      (result) => {
+        const { data } = result;
+        return {
+          location: data.name as string,
+          temperature: data.main.temp as number,
+          minimumTemp: data.main.temp_min as number,
+          maximumTemp: data.main.temp_max as number,
+          humidity: data.main.humidity as number,
+        };
+      },
+    );
+    const airData: Partial<AirResponse>[] = airResponse.map((result) => {
+      const { components } = result.data.list[0];
+      return {
+        pm10: components.pm10 as number,
+        pm25: components.pm2_5 as number,
+      };
+    });
+
+    for (let i = 0; i < weatherData.length; i++) {
+      newArr.push({
+        ...weatherData[i],
+        ...airData[i],
+      });
+    }
+
+    return { data: newArr };
   }
 }
